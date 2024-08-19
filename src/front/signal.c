@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/02 15:34:55 by labdello         ###   ########.fr       */
+/*   Created: 2024/09/02 15:30:34 by labdello          #+#    #+#             */
+/*   Updated: 2024/09/02 15:31:31 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include "libft.h"
-# include <stdio.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-void	signal_handler(int status);
-char	*get_prompt(char *station);
-char	*get_station(char *session);
-
-#endif
+void	signal_handler(int status)
+{
+	if (status == 2)
+	{
+		rl_replace_line("", 0);
+		ft_putstr_fd("\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
