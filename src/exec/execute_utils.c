@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:13:50 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/12 14:47:34 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:11:00 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	close_pipes(t_cmd **cmds)
 	}
 }
 
-void	init_files(t_cmd **cmds)
+void	init_files(t_cmd **cmds, t_env *env)
 {
 	t_cmd	*current;
 	t_file	*to_read;
@@ -39,9 +39,9 @@ void	init_files(t_cmd **cmds)
 		to_read = current->to_read;
 		to_write = current->to_write;
 		if (to_read)
-			current->in = set_file(to_read);
+			current->in = set_file(to_read, env);
 		if (to_write)
-			current->out = set_file(to_write);
+			current->out = set_file(to_write, env);
 		current = current->next;
 	}
 }

@@ -6,34 +6,59 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:34:38 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/11 19:50:12 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:44:21 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	here_doc(char *eof)
+void	rl_heredoc(char *eof, int tmp_fd)
 {
-	(void)eof;
-	return (0);
+	char	*line;
+
+	signal(SIGINT, &heredoc_sig);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line || ft_strcmp(line, eof) == 0)
+		{
+			close(tmp_fd);
+			free(line);
+			exit(0);
+		}
+		ft_putendl_fd(line, tmp_fd);
+		free(line);
+	}
 }
 
-// int	handle_here_doc(char *eof, t_cmd *cmd)
-// {
-// 	int	fd;
-//
-// 	fd = here_doc(eof);
-// 	if (cmd->to_read == -1 && fd > 1)
-// 	{
-// 		close(fd);
-// 		return (cmd->to_read);
-// 	}
-// 	if (cmd->to_read > 1)
-// 		close(cmd->to_read);
-// 	return (fd);
-// }
+int	here_doc(char *eof, t_env *env)
+{
+	int		fd;
+	int		pid;
 
-int	set_file(t_file *current)
+	signal(SIGINT, SIG_IGN);
+	if (access("/tmp/.heredoc", F_OK | X_OK) == -1)
+		unlink("/tmp/.heredoc");
+	fd = open("/tmp/.heredoc", O_RDWR | O_CREAT | O_TRUNC, 0777);
+	pid = fork();
+	if (pid == -1)
+		return (close(fd), -1);
+	if (pid == 0)
+	{
+		close(env->fd_in);
+		close(env->fd_out);
+		rl_heredoc(eof, fd);
+	}
+	waitpid(pid, NULL, 0);
+	signal(SIGINT, &readline_sig);
+	close(fd);
+	fd = open("/tmp/.heredoc", O_RDWR);
+	if (access("/tmp/.heredoc", F_OK | X_OK) == -1)
+		return (close(fd), -1);
+	return (fd);
+}
+
+int	set_file(t_file *current, t_env *env)
 {
 	int		fd;
 	int		tmp;
@@ -45,7 +70,7 @@ int	set_file(t_file *current)
 		if (tmp > 1)
 			close(tmp);
 		if (current->type == 14)
-			tmp = here_doc(current->name);
+			tmp = here_doc(current->name, env);
 		else if (fd != -1 && current->type == 12)
 			tmp = open(current->name, O_RDONLY);
 		else if (fd != -1 && current->type == 11)
@@ -57,8 +82,8 @@ int	set_file(t_file *current)
 		current = current->next;
 	}
 	if (fd != -1)
-		fd = tmp;
-	return (fd);
+		return (tmp);
+	return (close(tmp), fd);
 }
 
 int	check_cmd_path(char **str, char *path, char *exec)

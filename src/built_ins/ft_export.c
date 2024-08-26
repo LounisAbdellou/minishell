@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:14:17 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 14:46:13 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:36:38 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	append_var(char *arg, char ***env)
 		(*env)[i] = tmp[i];
 		i++;
 	}
-	(*env)[i] = arg;
+	(*env)[i] = ft_strdup(arg);
 	free(tmp);
 }
 
