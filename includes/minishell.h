@@ -121,6 +121,7 @@ void		print_tree(t_operation **ops, int is_sub);
 void		print_cmds(t_cmd **cmds);
 
 // BUILT_INS >>>
+int			ft_cd(char **args);
 int			ft_env(char **env);
 int			ft_echo(char **args);
 int			ft_export(char **args, char ***env);
