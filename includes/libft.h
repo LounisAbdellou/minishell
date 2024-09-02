@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 13:28:39 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/10 15:24:34 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/17 18:04:01 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int			ft_isprint(int c);
 int			ft_isspace(int c);
 int			ft_islower(int c);
 int			ft_isupper(int c);
+int			ft_ischr(char *str, char c);
 int			ft_tolower(int c);
 int			ft_toupper(int c);
 int			ft_atoi(const char *str);
