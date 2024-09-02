@@ -3,23 +3,26 @@ NAME = minishell
 CFLAGS = -Wall -Wextra -Werror -Iincludes
 LIBFT = ./libft/libft.a
 
-SRCDIR = src
-OBJDIR = obj
+SRC_DIR = src
+OBJ_DIR = obj
+FRONT_DIR = front
 
-SRCS = $(addprefix $(SRCDIR)/, main.c)
-OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+FRONT = $(addprefix $(FRONT_DIR)/, prompt.c signal.c)
+SRCS = $(addprefix $(SRC_DIR)/, $(FRONT) main.c)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	@make -C libft
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) -lreadline
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):
-	mkdir -p $(OBJDIR)
+	mkdir -p $(OBJ_DIR)
+	mkdir -p $(OBJ_DIR)/$(FRONT_DIR)
 
 clean:
 	@make clean -C libft

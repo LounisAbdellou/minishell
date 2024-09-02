@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strjoin_sep.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/02 15:34:55 by labdello         ###   ########.fr       */
+/*   Created: 2024/08/22 15:46:58 by labdello          #+#    #+#             */
+/*   Updated: 2024/08/22 15:51:42 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include "libft.h"
-# include <stdio.h>
-# include <signal.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+char	*ft_strjoin_sep(char *s1, char *s2, char *sep)
+{
+	size_t	total_len;
+	char	*copy;
 
-void	signal_handler(int status);
-char	*get_prompt(char *station);
-char	*get_station(char *session);
-
-#endif
+	if (!s1 || !s2 || !sep)
+		return (NULL);
+	total_len = ft_strlen(s1) + ft_strlen(s2) + ft_strlen(sep);
+	copy = malloc(sizeof(char) * (total_len + 1));
+	if (!copy)
+		return (NULL);
+	*copy = '\0';
+	ft_strcat(copy, s1);
+	ft_strcat(copy, sep);
+	ft_strcat(copy, s2);
+	return (copy);
+}

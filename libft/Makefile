@@ -17,7 +17,7 @@ SRCS = ft_nbrlen.c ft_strlen.c ft_strlcpy.c ft_strlcat.c ft_abs.c ft_isalpha.c \
 	   ft_lstnew.c ft_lstadd_front.c ft_lstadd_back.c ft_puthex_fd.c\
 	   ft_lstlast.c ft_lstdelone.c ft_lstclear.c \
 	   ft_lstiter.c ft_lstmap.c ft_printf/main.c ft_printf/utils.c \
-	   ft_printf/handlers.c ft_print_tab.c ft_print_2dtab.c
+	   ft_printf/handlers.c ft_print_tab.c ft_print_2dtab.c ft_strjoin_sep.c
 
 OBJS = $(SRCS:.c=.o)
 
