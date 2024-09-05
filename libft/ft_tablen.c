@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/26 17:33:18 by labdello          #+#    #+#             */
-/*   Updated: 2024/07/26 17:36:30 by labdello         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:45:28 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ size_t	ft_tablen(char **tab)
 	size_t	i;
 
 	i = 0;
+	if (!tab)
+		return (0);
 	while (tab[i] != NULL)
 		i++;
 	return (i);
