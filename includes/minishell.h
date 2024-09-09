@@ -123,6 +123,7 @@ void		print_cmds(t_cmd **cmds);
 // BUILT_INS >>>
 int			ft_env(char **env);
 int			ft_export(char **args, char ***env);
+int			ft_unset(char **args, char ***env);
 int			find_var_pos(char *var_name, char **env, size_t *pos);
 
 #endif
