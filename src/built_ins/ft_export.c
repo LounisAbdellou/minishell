@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:14:17 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/09 17:14:20 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:24:47 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,6 @@ int	check_identifier(char *str)
 		i++;
 	}
 	return (1);
-}
-
-void	print_env(char **env)
-{
-	size_t	i;
-	size_t	len;
-
-	i = 0;
-	len = ft_tablen(env);
-	while (i < len)
-	{
-		ft_putendl_fd(env[i], 1);
-		i++;
-	}
 }
 
 void	append_var(char *arg, char ***env)
@@ -79,7 +65,7 @@ int	ft_export(char **args, char ***env)
 	i = 1;
 	if (ft_tablen(args) < 2)
 	{
-		print_env(*env);
+		ft_env(*env);
 		return (0);
 	}
 	while (args[i] != NULL)
@@ -90,6 +76,5 @@ int	ft_export(char **args, char ***env)
 			return (1);
 		i++;
 	}
-	print_env(*env);
 	return (0);
 }

@@ -11,7 +11,7 @@ PARSING_DIR = parsing
 STRUCT_DIR = struct
 
 FRONT = $(addprefix $(FRONT_DIR)/, prompt.c signal.c)
-BUILTINS = $(addprefix $(BUILTINS_DIR)/, utils.c ft_export.c)
+BUILTINS = $(addprefix $(BUILTINS_DIR)/, utils.c ft_export.c ft_env.c)
 PARSING = $(addprefix $(PARSING_DIR)/, parsing.c tokenizer.c tokenizer_utils.c analyzer_utils.c expand_utils.c parse_tree.c setter_cmd.c setter_cmd_utils.c free_parse.c)
 STRUCT = $(addprefix $(STRUCT_DIR)/, lst_word.c lst_op.c lst_cmd.c)
 SRCS = $(addprefix $(SRC_DIR)/, $(FRONT) $(PARSING) $(STRUCT) $(BUILTINS) main.c print_dev.c)
@@ -30,9 +30,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)
 	mkdir -p $(OBJ_DIR)/$(FRONT_DIR)
+	mkdir -p $(OBJ_DIR)/$(BUILTINS_DIR)
 	mkdir -p $(OBJ_DIR)/$(PARSING_DIR)
 	mkdir -p $(OBJ_DIR)/$(STRUCT_DIR)
-	mkdir -p $(OBJ_DIR)/$(BUILTINS_DIR)
 
 clean:
 	@make clean -C libft
