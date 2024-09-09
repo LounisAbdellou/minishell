@@ -30,12 +30,6 @@ typedef struct s_word
 	struct s_word	*prev;
 }	t_word;
 
-typedef struct s_files
-{
-	int		in;
-	int		out;
-}	t_files;
-
 typedef struct s_cmd
 {
 	char				*path;
@@ -52,6 +46,7 @@ typedef struct s_cmd
 typedef struct s_operation
 {
 	int					type;
+	int					s_exec;
 	struct s_operation	*next;
 	struct s_operation	*prev;
 	struct s_cmd		*cmd;
@@ -94,8 +89,17 @@ int			set_path_cmd(t_word *t, t_cmd *cmd);
 t_word		*skip_parenthesis(t_word *token);
 int			check_cmd_path(char **str, char *path, char *exec);
 int			here_doc(char *eof);
+int			get_fd_cmd(t_word *t, char *file, t_cmd *cmd);
 
 // EXEC >>>
+int			execute_tree(t_operation **ops, char **env);
+void		execute_cmd(t_operation *op, t_cmd **cmds, t_cmd *current,
+				char **env);
+void		execute_this(t_cmd *cmd, t_cmd **cmds, char **env);
+void		close_pipes(t_cmd **cmds);
+void		wait_for_all(t_operation *op, t_cmd **cmds);
+void		error_from_exec(t_cmd **cmds);
+void		return_error(void);
 
 // STRUCT >>>
 t_word		*ft_wordnew(char *str);

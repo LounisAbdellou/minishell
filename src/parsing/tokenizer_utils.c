@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 15:18:52 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/05 13:42:39 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:03:14 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	isnt_token_end(char *input)
 {
 	if (!input[0] || ft_isspace(input[0]))
 		return (0);
-	if (!input[1] || ft_isspace(input[1]))
+	if ((!input[1] || ft_isspace(input[1])) && input[0] != 34 && input[0] != 39)
 		return (0);
 	if (is_dbl_token(input + 1))
 		return (0);

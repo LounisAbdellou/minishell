@@ -21,13 +21,13 @@ static int	minishell_do(char *input, char **env)
 		return (1);
 	token = NULL;
 	ops = NULL;
-	(void)env;
 	if (!tokenize_input(input, &token))
 		return (free_words(&token), 0);
 	if (!analyze_syntax(&token))
 		return (free_words(&token), 0);
 	if (!parse_tree(&token, &ops))
 		return (free_parse(&token, &ops), 0);
+	execute_tree(&ops, env);
 	return (free_parse(&token, &ops), 1);
 }
 

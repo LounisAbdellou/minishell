@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 16:59:32 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/02 12:23:03 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/06 12:59:06 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_operation	*ft_opnew(int type)
 	if (!new)
 		return (NULL);
 	new->type = type;
+	new->s_exec = -1;
 	new->next = NULL;
 	new->prev = NULL;
 	new->cmd = NULL;
