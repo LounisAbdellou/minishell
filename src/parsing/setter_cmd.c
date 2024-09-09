@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 12:45:20 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/05 17:11:35 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/06 19:14:20 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,8 @@ int	set_file_cmd(t_word *t, t_cmd *cmd)
 	char	*content;
 
 	content = t->next->content;
-	fd = -1;
-	if (t->type == 14)
-		fd = here_doc(content);
-	else if (t->type == 13)
-		fd = open(content, O_CREAT | O_RDWR | O_APPEND, 0644);
-	else if (t->type == 12)
-		fd = open(content, O_RDONLY);
-	else if (t->type == 11)
-		fd = open(content, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (fd == -1 && t->type == 14)
-		return (0);
-	else if (t->type == 13 || t->type == 11)
+	fd = get_fd_cmd(t, content, cmd);
+	if (t->type == 13 || t->type == 11)
 		cmd->to_write = fd;
 	else if (t->type == 14 || t->type == 12)
 		cmd->to_read = fd;

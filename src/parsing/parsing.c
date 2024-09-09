@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:38:16 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/05 12:43:29 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:02:17 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,12 @@ int	generate_token(char *str, int len, t_word **lst)
 	char	*token;
 	t_word	*new;
 	int		type;
+	int		s;
 
-	extract = ft_strndup(str, len);
+	s = 0;
+	if (str[0] == 34 || str[0] == 39)
+		s = 1;
+	extract = ft_strndup(str, len - s);
 	if (!extract)
 		return (0);
 	type = attribute_type(extract);
@@ -99,7 +103,7 @@ int	tokenize_input(char *input, t_word **lst)
 	start = 0;
 	while (input[i])
 	{
-		while (ft_isspace(input[i]))
+		while (input[i] && ft_isspace(input[i]))
 			i++;
 		if (!input[i])
 			return (1);
