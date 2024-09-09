@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/04 14:44:32 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/06 17:04:12 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,9 @@ void		print_tab(char **tab);
 void		print_lst_word(t_word *lst);
 void		print_tree(t_operation **ops, int is_sub);
 void		print_cmds(t_cmd **cmds);
+
+// BUILT_INS >>>
+int			ft_export(char **args, char ***env);
+int			find_var_pos(char *var_name, char **env, size_t *pos);
 
 #endif

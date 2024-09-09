@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:01:50 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/04 15:41:59 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/09 17:10:32 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ static int	minishell_do(char *input, char **env)
 		return (free_words(&token), 0);
 	if (!parse_tree(&token, &ops))
 		return (free_parse(&token, &ops), 0);
-	print_tree(&ops, 0);
-	// if (!execute_tree(&ops))
-	// 	return (free_parse(&token, &ops), 0);
 	return (free_parse(&token, &ops), 1);
 }
 
