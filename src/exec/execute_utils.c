@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_cmds.c                                     :+:      :+:    :+:   */
+/*   execute_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:13:50 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/09 14:52:33 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:09:18 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static int	check_cmd(t_cmd *current)
 	return (1);
 }
 
-void	execute_cmd(t_operation *op, t_cmd **cmds, t_cmd *current, char **env)
+void	execute_cmd(t_operation *op, t_cmd **cmds, t_cmd *current, t_env *env)
 {
 	init_pipes(cmds);
 	while (current)

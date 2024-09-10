@@ -6,12 +6,15 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/06 17:04:12 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 13:47:09 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# define ENV_PATH "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:\
+/bin:/usr/games:/usr/local/games:/snap/bin/"
 
 # include "libft.h"
 # include <limits.h>
@@ -21,6 +24,15 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+typedef struct s_env
+{
+	char	*path;
+	char	**vars;
+	int		fd_in;
+	int		fd_out;
+	int		last_status;
+}	t_env;
 
 typedef struct s_word
 {
@@ -81,21 +93,20 @@ int			analyze_par(t_word *token);
 int			analyze_closure(t_word *token);
 
 // PARSER >>>
-int			parse_tree(t_word **tokens, t_operation **ops);
-int			generate_tree(t_word *t, t_operation **ops);
+int			parse_tree(t_word **tokens, t_operation **ops, t_env *env);
+int			generate_tree(t_word *t, t_operation **ops, t_env *env);
 int			set_file_cmd(t_word *t, t_cmd *cmd);
 int			set_arg_cmd(t_word *t, t_cmd *cmd);
-int			set_path_cmd(t_word *t, t_cmd *cmd);
+int			set_path_cmd(t_word *t, t_cmd *cmd, t_env *env);
 t_word		*skip_parenthesis(t_word *token);
 int			check_cmd_path(char **str, char *path, char *exec);
 int			here_doc(char *eof);
 int			get_fd_cmd(t_word *t, char *file, t_cmd *cmd);
 
 // EXEC >>>
-int			execute_tree(t_operation **ops, char **env);
-void		execute_cmd(t_operation *op, t_cmd **cmds, t_cmd *current,
-				char **env);
-void		execute_this(t_cmd *cmd, t_cmd **cmds, char **env);
+int			execute_tree(t_operation **ops, t_env *env);
+void		execute_cmd(t_operation *op, t_cmd **cmds, t_cmd *current, t_env *env);
+void		execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env);
 void		close_pipes(t_cmd **cmds);
 void		wait_for_all(t_operation *op, t_cmd **cmds);
 void		error_from_exec(t_cmd **cmds);

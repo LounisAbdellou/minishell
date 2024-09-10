@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 12:45:20 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/06 19:14:20 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:30:04 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ static int	get_type_cmd(char *content)
 	return (1);
 }
 
-static char	*get_path_cmd(char *content, t_cmd *cmd)
+static char	*get_path_cmd(char *content, t_cmd *cmd, t_env *env)
 {
 	char	*str;
 	char	**path;
 	int		i;
 
-	str = getenv("PATH");
+	str = env->path;
 	if (!str || cmd->type == 0 || access(content, X_OK) == 0 || !content[0])
 		return (content);
 	str = ft_strdup(str);
@@ -101,7 +101,7 @@ int	set_arg_cmd(t_word *t, t_cmd *cmd)
 	return (1);
 }
 
-int	set_path_cmd(t_word *t, t_cmd *cmd)
+int	set_path_cmd(t_word *t, t_cmd *cmd, t_env *env)
 {
 	char	*content;
 
@@ -109,7 +109,7 @@ int	set_path_cmd(t_word *t, t_cmd *cmd)
 	if (!content)
 		return (0);
 	cmd->type = get_type_cmd(content);
-	cmd->path = get_path_cmd(content, cmd);
+	cmd->path = get_path_cmd(content, cmd, env);
 	if (!cmd->path)
 		return (0);
 	cmd->args = ft_calloc(2, sizeof(char *));

@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 19:40:27 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/04 15:52:28 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:31:01 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static int	next_op(t_word *t, t_operation **ops)
 	return (1);
 }
 
-static int	recursive_parse(t_word *token, t_cmd **cmds)
+static int	recursive_parse(t_word *token, t_cmd **cmds, t_env *env)
 {
 	t_operation	*sub;
 	t_cmd		*new;
@@ -85,13 +85,13 @@ static int	recursive_parse(t_word *token, t_cmd **cmds)
 		new = ft_cmdnew(2);
 	if (!new)
 		return (0);
-	if (!parse_tree(&token, &sub))
+	if (!parse_tree(&token, &sub, env))
 		return (0);
 	new->sub = sub;
 	return (1);
 }
 
-int	generate_tree(t_word *t, t_operation **ops)
+int	generate_tree(t_word *t, t_operation **ops, t_env *env)
 {
 	t_cmd	*cmd;
 
@@ -99,7 +99,7 @@ int	generate_tree(t_word *t, t_operation **ops)
 	cmd = cmd_last_or_new(t, ops);
 	if (!cmd)
 		return (0);
-	if (t->type == 1 && !set_path_cmd(t, cmd))
+	if (t->type == 1 && !set_path_cmd(t, cmd, env))
 		return (0);
 	else if (cmd && t->type == 2 && !set_arg_cmd(t, cmd))
 		return (0);
@@ -108,6 +108,6 @@ int	generate_tree(t_word *t, t_operation **ops)
 	else if ((t->type == 6 || t->type == 7) && !next_op(t, ops))
 		return (0);
 	else if (t->type == 8)
-		return (recursive_parse(t->next, &cmd));
+		return (recursive_parse(t->next, &cmd, env));
 	return (1);
 }
