@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/16 00:11:11 by labdello          #+#    #+#             */
-/*   Updated: 2024/05/29 17:25:09 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/16 13:30:16 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,10 @@ char	**ft_split(char const *s, char c)
 {
 	char	**tab;
 
+	if (!s)
+		return (NULL);
 	tab = (char **) malloc(sizeof(char *) * (get_word_count(s, c) + 1));
-	if (!tab || !s)
+	if (!tab)
 		return (NULL);
 	tab[get_word_count(s, c)] = NULL;
 	if (!fill_tab(tab, s, c))

@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:01:50 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/13 19:10:12 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:52:41 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,29 +65,6 @@ void	minishell(char *station, t_env *env)
 	rl_clear_history();
 }
 
-void	init_env(t_env *local_env, char **env)
-{
-	char	**tab;
-
-	local_env->vars = ft_tabdup(env);
-	local_env->fd_in = dup(0);
-	local_env->fd_out = dup(1);
-	local_env->path = getenv("PATH");
-	local_env->last_status = 0;
-	local_env->s_expand = 0;
-	local_env->is_env = 0;
-	if (!local_env->path)
-		local_env->path = ENV_PATH;
-	if (!env[0] && ft_tablen(env) < 1)
-	{
-		tab = ft_calloc(2, sizeof(char *));
-		if (!tab)
-			return ;
-		tab[0] = ft_strdup("_=/usr/bin/env");
-		local_env->vars = tab;
-	}
-}
-
 int	main(int ac, char **av, char **env)
 {
 	t_env	local_env;
@@ -95,15 +72,13 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
-	init_env(&local_env, env);
+	if (!init_env(&local_env, env))
+		return (free_env(&local_env), 1);
 	station = get_station(getenv("SESSION_MANAGER"));
 	signal(SIGINT, &readline_sig);
 	signal(SIGQUIT, SIG_IGN);
 	minishell(station, &local_env);
-	if (local_env.vars)
-		ft_free_tab(local_env.vars);
-	close(local_env.fd_in);
-	close(local_env.fd_out);
+	free_env(&local_env);
 	if (station)
 		free(station);
 	return (0);

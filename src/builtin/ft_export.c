@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:14:17 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 16:36:38 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/16 17:52:54 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,30 @@ void	append_var(char *arg, char ***env)
 	size_t		len;
 	char		**tmp;
 
-	i = 0;
+	i = -1;
 	len = ft_tablen(*env);
 	tmp = *env;
 	*env = ft_calloc(len + 2, sizeof(char *));
 	if (!(*env))
-		return ;
-	while (i < len)
 	{
-		(*env)[i] = tmp[i];
-		i++;
+		*env = tmp;
+		return ;
+	}
+	while (++i < len)
+	{
+		(*env)[i] = ft_strdup(tmp[i]);
+		if (!(*env)[i])
+		{
+			ft_free_tab(*env);
+			*env = tmp;
+			return ;
+		}
 	}
 	(*env)[i] = ft_strdup(arg);
-	free(tmp);
+	ft_free_tab(tmp);
 }
 
-int	exec_export(char *arg, char ***env)
+int	exec_export(char *arg, t_env *env)
 {
 	size_t	pos;
 	char	**tab;
@@ -62,22 +70,30 @@ int	exec_export(char *arg, char ***env)
 		ft_free_tab(tab);
 		return (0);
 	}
-	if (!find_var_pos(tab[0], *env, &pos))
-		append_var(arg, env);
+	if (ft_strcmp(tab[0], "PATH") == 0)
+	{
+		if (env->path)
+			free(env->path);
+		env->path = ft_strdup(ft_strchr(arg, '=') + 1);
+	}
+	if (!find_var_pos(tab[0], env->vars, &pos))
+		append_var(arg, &(env->vars));
 	else
-		(*env)[pos] = arg;
-	ft_free_tab(tab);
-	return (1);
+	{
+		free(env->vars[pos]);
+		env->vars[pos] = ft_strdup(arg);
+	}
+	return (ft_free_tab(tab), 1);
 }
 
-int	ft_export(char **args, char ***env)
+int	ft_export(char **args, t_env *env)
 {
 	size_t	i;
 
 	i = 1;
 	if (ft_tablen(args) < 2)
 	{
-		ft_env(*env);
+		ft_env(env->vars);
 		return (0);
 	}
 	while (args[i] != NULL)
