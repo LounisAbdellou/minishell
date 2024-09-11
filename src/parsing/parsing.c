@@ -76,7 +76,8 @@ int	generate_token(char *str, int len, t_word **lst)
 	int		s;
 
 	s = 0;
-	if (str[0] == 34 || str[0] == 39)
+	if (len > 1 && (str[len - 2] == 34 || str[len - 2] == 39)
+		&& ft_isspace(str[len - 1]))
 		s = 1;
 	extract = ft_strndup(str, len - s);
 	if (!extract)

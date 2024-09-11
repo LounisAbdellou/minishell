@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/23 12:20:14 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/04 15:46:49 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:48:18 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	print_cmds(t_cmd **cmds)
 	while (cmd)
 	{
 		printf("cmd %d : %p, type : %d, next : %p\n", i, cmd, cmd->type, cmd->next);
-		printf("path : %s, to_read : %d, to_write: %d, pid : %d\n", cmd->path, cmd->to_read, cmd->to_write, cmd->pid);
+		printf("path : %s, to_read : %d, to_write: %d, pid : %d\n", cmd->path, cmd->in, cmd->out, cmd->pid);
 		if (cmd->type != 2 && cmd->type != -1)
 			print_tab(cmd->args);
 		else

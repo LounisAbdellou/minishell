@@ -6,28 +6,11 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/12 14:09:33 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 15:05:27 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	return_error(void)
-{
-	static int	has_err;
-
-	if (!has_err)
-		perror("Pipex error");
-	has_err = 1;
-}
-
-void	error_from_exec(t_cmd **cmds)
-{
-	close_pipes(cmds);
-	free_cmds(cmds);
-	return_error();
-	exit(1);
-}
 
 static int	execblt(t_cmd *cmd, t_env *env)
 {
@@ -51,7 +34,7 @@ static int	execblt(t_cmd *cmd, t_env *env)
 	return (status);
 }
 
-void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
+static void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 {
 	int	status;
 
@@ -63,6 +46,8 @@ void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 	else if (cmd->type == 2)
 	{
 		status = execute_tree(&(cmd->sub), env);
+		if (status == -2)
+			exit(0);
 		exit(status);
 	}
 	else
@@ -73,24 +58,69 @@ void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 	return ;
 }
 
+static void	execute_cmd(t_cmd **cmds, t_cmd *current, t_env *env)
+{
+	current->pid = fork();
+	if (current->pid == 0)
+	{
+		close(env->fd_in);
+		close(env->fd_out);
+		dup2(current->out, 1);
+		if (!check_cmd(current))
+			error_from_exec(cmds);
+		else
+		{
+			if (current->in > -1)
+				dup2(current->in, 0);
+			close_pipes(cmds);
+			execute_this(current, cmds, env);
+		}
+	}
+	else if (current->pid < 0)
+		error_from_exec(cmds);
+}
+
+static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
+{
+	int	status;
+
+	init_files(cmds);
+	init_pipes(cmds);
+	if (current->next == NULL && current->type == 0)
+	{
+		dup2(current->out, 1);
+		if (current->in > -1)
+			dup2(current->in, 0);
+		close_pipes(cmds);
+		status = execblt(current, env);
+		return (dup2(env->fd_in, 0), dup2(env->fd_out, 1), status);
+	}
+	while (current)
+	{
+		execute_cmd(cmds, current, env);
+		current = current->next;
+	}
+	close_pipes(cmds);
+	return (wait_for_all(cmds));
+}
+
 int	execute_tree(t_operation **ops, t_env *env)
 {
 	t_operation	*op;
-	int			res;
+	int			status;
 
 	op = *ops;
+	status = -1;
 	while (op)
 	{
-		if (op->type == 2)
-			execute_cmd(op, &(op->cmd), op->cmd, env);
-		else if (op->prev && op->type == op->prev->s_exec)
-			execute_cmd(op, &(op->cmd), op->cmd, env);
-		else if (op->prev && op->type == 1 && op->prev->s_exec != 0)
-			execute_cmd(op, &(op->cmd), op->cmd, env);
-		if (op->prev && op->s_exec == -1)
+		if (!should_exec(op))
 			op->s_exec = op->prev->s_exec;
-		res = op->s_exec;
+		else
+			op->s_exec = execute_op(&(op->cmd), op->cmd, env);
+		if (op->s_exec == -2)
+			return (printf("exit =)\n"), -1);
+		status = op->s_exec;
 		op = op->next;
 	}
-	return (res);
+	return (status);
 }

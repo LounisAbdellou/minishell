@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 16:59:50 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/04 15:50:17 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/12 12:25:02 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,15 @@ t_cmd	*ft_cmdnew(int type)
 		return (NULL);
 	new->type = type;
 	new->pid = 0;
+	new->in = -2;
+	new->out = -2;
 	new->next = NULL;
 	new->prev = NULL;
 	new->path = NULL;
 	new->args = NULL;
 	new->sub = NULL;
-	new->to_read = -2;
-	new->to_write = -2;
+	new->to_read = NULL;
+	new->to_write = NULL;
 	return (new);
 }
 
@@ -75,6 +77,10 @@ void	free_cmds(t_cmd **lst)
 			ft_free_tab(cmd->args);
 		if (cmd->sub)
 			free_operations(&(cmd->sub));
+		if (cmd->to_read)
+			free_file(&(cmd->to_read));
+		if (cmd->to_write)
+			free_file(&(cmd->to_write));
 		cmd = cmd->next;
 		free(tmp);
 		tmp = NULL;

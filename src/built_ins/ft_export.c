@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:14:17 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 14:11:04 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:46:13 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,5 @@ int	ft_export(char **args, char ***env)
 			return (1);
 		i++;
 	}
-	ft_env(*env);
 	return (0);
 }
