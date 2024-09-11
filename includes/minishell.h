@@ -77,6 +77,7 @@ typedef struct s_operation
 }	t_operation;
 
 // FRONT >>>
+void		config_cmd_sig(int is_reset);
 void		heredoc_sig(int status);
 void		readline_sig(int status);
 char		*get_prompt(char *station);
