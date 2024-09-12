@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 13:47:09 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:24:37 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <signal.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -76,7 +77,8 @@ typedef struct s_operation
 }	t_operation;
 
 // FRONT >>>
-void		signal_handler(int status);
+void		heredoc_sig(int status);
+void		readline_sig(int status);
 char		*get_prompt(char *station);
 char		*get_station(char *session);
 
@@ -111,12 +113,12 @@ int			set_arg_cmd(t_word *t, t_cmd *cmd);
 int			set_path_cmd(t_word *t, t_cmd *cmd, t_env *env);
 t_word		*skip_parenthesis(t_word *token);
 int			check_cmd_path(char **str, char *path, char *exec);
-int			here_doc(char *eof);
-int			set_file(t_file *current);
+int			here_doc(char *eof, t_env *env);
+int			set_file(t_file *current, t_env *env);
 
 // EXEC >>>
 int			execute_tree(t_operation **ops, t_env *env);
-void		init_files(t_cmd **cmds);
+void		init_files(t_cmd **cmds, t_env *env);
 void		init_pipes(t_cmd **cmds);
 void		close_pipes(t_cmd **cmds);
 int			should_exec(t_operation *op);

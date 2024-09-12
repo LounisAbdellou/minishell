@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:01:50 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 14:18:46 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 16:08:30 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	init_env(&local_env, env);
 	station = get_station(getenv("SESSION_MANAGER"));
-	signal(SIGINT, &signal_handler);
+	signal(SIGINT, &readline_sig);
 	signal(SIGQUIT, SIG_IGN);
 	minishell(station, &local_env);
 	if (local_env.vars)

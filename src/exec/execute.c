@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/12 15:05:27 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:11:12 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	execblt(t_cmd *cmd, t_env *env)
 	if (!ft_strcmp(cmd->path, "export"))
 		status = ft_export(cmd->args, &env->vars);
 	if (!ft_strcmp(cmd->path, "exit"))
-		status = 0;
+		status = -2;
 	if (!ft_strcmp(cmd->path, "pwd"))
 		status = ft_pwd();
 	if (!ft_strcmp(cmd->path, "env"))
@@ -84,7 +84,7 @@ static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
 {
 	int	status;
 
-	init_files(cmds);
+	init_files(cmds, env);
 	init_pipes(cmds);
 	if (current->next == NULL && current->type == 0)
 	{
