@@ -38,6 +38,8 @@ static void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 {
 	int	status;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (cmd->type == 0)
 	{
 		status = execblt(cmd, env);
@@ -86,6 +88,7 @@ static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
 
 	init_files(cmds, env);
 	init_pipes(cmds);
+	config_cmd_sig(0);
 	if (current->next == NULL && current->type == 0)
 	{
 		dup2(current->out, 1);
@@ -116,7 +119,10 @@ int	execute_tree(t_operation **ops, t_env *env)
 		if (!should_exec(op))
 			op->s_exec = op->prev->s_exec;
 		else
+		{
 			op->s_exec = execute_op(&(op->cmd), op->cmd, env);
+			config_cmd_sig(1);
+		}
 		if (op->s_exec == -2)
 			return (printf("exit =)\n"), -1);
 		status = op->s_exec;

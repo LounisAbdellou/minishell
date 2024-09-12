@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:30:34 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/09 14:36:44 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/11 17:29:56 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,22 @@ void	readline_sig(int status)
 	}
 }
 
+void	cmd_sig(int status)
+{
+	if (status == 2)
+	{
+		rl_replace_line("", 0);
+		ft_putstr_fd("\n", 1);
+		rl_on_new_line();
+	}
+	if (status == 3)
+	{
+		rl_replace_line("", 0);
+		ft_putstr_fd("Quit (core dumped)\n", 1);
+		rl_on_new_line();
+	}
+}
+
 void	heredoc_sig(int status)
 {
 	if (status == 2)
@@ -33,4 +49,16 @@ void	heredoc_sig(int status)
 		unlink("/tmp/.heredoc");
 		exit(0);
 	}
+}
+
+void	config_cmd_sig(int is_reset)
+{
+	if (is_reset)
+	{
+		signal(SIGINT, &readline_sig);
+		signal(SIGQUIT, SIG_IGN);
+		return ;
+	}
+	signal(SIGINT, &cmd_sig);
+	signal(SIGQUIT, &cmd_sig);
 }
