@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:34:38 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/09 12:29:47 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/11 19:50:12 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,46 +18,46 @@ int	here_doc(char *eof)
 	return (0);
 }
 
-int	handle_here_doc(char *eof, t_cmd *cmd)
-{
-	int	fd;
+// int	handle_here_doc(char *eof, t_cmd *cmd)
+// {
+// 	int	fd;
+//
+// 	fd = here_doc(eof);
+// 	if (cmd->to_read == -1 && fd > 1)
+// 	{
+// 		close(fd);
+// 		return (cmd->to_read);
+// 	}
+// 	if (cmd->to_read > 1)
+// 		close(cmd->to_read);
+// 	return (fd);
+// }
 
-	fd = here_doc(eof);
-	if (cmd->to_read == -1 && fd > 1)
-	{
-		close(fd);
-		return (cmd->to_read);
-	}
-	if (cmd->to_read > 1)
-		close(cmd->to_read);
-	return (fd);
-}
-
-int	get_fd_cmd(t_word *t, char *file, t_cmd *cmd)
+int	set_file(t_file *current)
 {
-	int	fd;
+	int		fd;
+	int		tmp;
 
 	fd = -2;
-	if (t->type == 14)
-		fd = handle_here_doc(file, cmd);
-	else if (t->type == 13 || t->type == 11)
+	tmp = -2;
+	while (current)
 	{
-		if (cmd->to_write > 1)
-			close(cmd->to_write);
-		if (t->type == 13)
-			fd = open(file, O_CREAT | O_RDWR | O_APPEND, 0644);
-		else
-			fd = open(file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		if (tmp > 1)
+			close(tmp);
+		if (current->type == 14)
+			tmp = here_doc(current->name);
+		else if (fd != -1 && current->type == 12)
+			tmp = open(current->name, O_RDONLY);
+		else if (fd != -1 && current->type == 11)
+			tmp = open(current->name, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		else if (fd != -1 && current->type == 13)
+			tmp = open(current->name, O_CREAT | O_RDWR | O_APPEND, 0644);
+		if (tmp == -1)
+			fd = tmp;
+		current = current->next;
 	}
-	else if (t->type == 12 || t->type == 14)
-	{
-		if (cmd->to_read == -1)
-			return (cmd->to_read);
-		if (cmd->to_read > 1)
-			close(cmd->to_read);
-		if (t->type == 12)
-			fd = open(file, O_RDONLY);
-	}
+	if (fd != -1)
+		fd = tmp;
 	return (fd);
 }
 

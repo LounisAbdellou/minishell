@@ -62,15 +62,19 @@ static char	*get_path_cmd(char *content, t_cmd *cmd, t_env *env)
 
 int	set_file_cmd(t_word *t, t_cmd *cmd)
 {
-	int		fd;
-	char	*content;
+	t_file		*new;
+	char		*content;
 
-	content = t->next->content;
-	fd = get_fd_cmd(t, content, cmd);
+	content = ft_strdup(t->next->content);
+	if (!content)
+		return (0);
+	new = ft_filenew(content, t->type);
+	if (!new)
+		return (free(content), 0);
 	if (t->type == 13 || t->type == 11)
-		cmd->to_write = fd;
+		ft_fileadd_back(new, &(cmd->to_write));
 	else if (t->type == 14 || t->type == 12)
-		cmd->to_read = fd;
+		ft_fileadd_back(new, &(cmd->to_read));
 	return (1);
 }
 

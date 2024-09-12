@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:14:27 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/09 16:04:13 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/10 16:19:19 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ int	handle_quotes(char *input, char c)
 		return (i);
 	while (input[i] != '\0' && input[i] != c)
 		i++;
-	return (i + 1);
+	if (input[i])
+		return (i + 1);
+	return (i);
 }
 
 int	transform_t(t_word *token)

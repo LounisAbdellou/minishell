@@ -17,7 +17,7 @@ static int	minishell_do(char *input, t_env *env)
 	t_word		*token;
 	t_operation	*ops;
 
-	if (!input[0])
+	if (!input || !input[0])
 		return (1);
 	token = NULL;
 	ops = NULL;
@@ -27,7 +27,8 @@ static int	minishell_do(char *input, t_env *env)
 		return (free_words(&token), 0);
 	if (!parse_tree(&token, &ops, env))
 		return (free_parse(&token, &ops), 0);
-	execute_tree(&ops, env);
+	if (execute_tree(&ops, env) == -1)
+		return (free_parse(&token, &ops), -1);
 	return (free_parse(&token, &ops), 1);
 }
 

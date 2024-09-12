@@ -42,14 +42,25 @@ typedef struct s_word
 	struct s_word	*prev;
 }	t_word;
 
+typedef struct s_file
+{
+	char			*name;
+	int				fd;
+	int				type;
+	struct s_file	*next;
+	struct s_file	*prev;
+}	t_file;
+
 typedef struct s_cmd
 {
 	char				*path;
 	char				**args;
 	int					type;
 	int					pid;
-	int					to_read;
-	int					to_write;
+	int					in;
+	int					out;
+	struct s_file		*to_read;
+	struct s_file		*to_write;
 	struct s_cmd		*next;
 	struct s_cmd		*prev;
 	struct s_operation	*sub;
@@ -101,14 +112,16 @@ int			set_path_cmd(t_word *t, t_cmd *cmd, t_env *env);
 t_word		*skip_parenthesis(t_word *token);
 int			check_cmd_path(char **str, char *path, char *exec);
 int			here_doc(char *eof);
-int			get_fd_cmd(t_word *t, char *file, t_cmd *cmd);
+int			set_file(t_file *current);
 
 // EXEC >>>
 int			execute_tree(t_operation **ops, t_env *env);
-void		execute_cmd(t_operation *op, t_cmd **cmds, t_cmd *current, t_env *env);
-void		execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env);
+void		init_files(t_cmd **cmds);
+void		init_pipes(t_cmd **cmds);
 void		close_pipes(t_cmd **cmds);
-void		wait_for_all(t_operation *op, t_cmd **cmds);
+int			should_exec(t_operation *op);
+int			check_cmd(t_cmd *current);
+int			wait_for_all(t_cmd **cmds);
 void		error_from_exec(t_cmd **cmds);
 void		return_error(void);
 
@@ -121,6 +134,9 @@ t_cmd		*ft_cmdlast(t_cmd *cmd);
 t_operation	*ft_opnew(int type);
 void		ft_opadd_back(t_operation *new, t_operation **lst);
 t_operation	*ft_oplast(t_operation *op);
+t_file		*ft_filenew(char *str, int type);
+void		ft_fileadd_back(t_file *new, t_file **lst);
+void		free_file(t_file **lst);
 
 // FREE >>>
 void		free_parse(t_word **token, t_operation **operations);
