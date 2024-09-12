@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_ops.c                                      :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/09 18:44:40 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:09:33 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	error_from_exec(t_cmd **cmds)
 	exit(1);
 }
 
-static int	execblt(t_cmd *cmd, char **env)
+static int	execblt(t_cmd *cmd, t_env *env)
 {
 	int	status;
 
@@ -39,19 +39,19 @@ static int	execblt(t_cmd *cmd, char **env)
 	if (!ft_strcmp(cmd->path, "cd"))
 		status = ft_cd(cmd->args);
 	if (!ft_strcmp(cmd->path, "unset"))
-		status = ft_unset(cmd->args, &env);
+		status = ft_unset(cmd->args, &env->vars);
 	if (!ft_strcmp(cmd->path, "export"))
-		status = ft_export(cmd->args, &env);
+		status = ft_export(cmd->args, &env->vars);
 	if (!ft_strcmp(cmd->path, "exit"))
 		status = 0;
 	if (!ft_strcmp(cmd->path, "pwd"))
 		status = ft_pwd();
 	if (!ft_strcmp(cmd->path, "env"))
-		status = ft_env(env);
+		status = ft_env(env->vars);
 	return (status);
 }
 
-void	execute_this(t_cmd *cmd, t_cmd **cmds, char **env)
+void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 {
 	int	status;
 
@@ -67,13 +67,13 @@ void	execute_this(t_cmd *cmd, t_cmd **cmds, char **env)
 	}
 	else
 	{
-		if (execve(cmd->path, cmd->args, env) == -1)
+		if (execve(cmd->path, cmd->args, env->vars) == -1)
 			error_from_exec(cmds);
 	}
 	return ;
 }
 
-int	execute_tree(t_operation **ops, char **env)
+int	execute_tree(t_operation **ops, t_env *env)
 {
 	t_operation	*op;
 	int			res;

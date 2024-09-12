@@ -6,13 +6,13 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:38:16 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/09 16:02:17 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:06:57 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	parse_tree(t_word **tokens, t_operation **ops)
+int	parse_tree(t_word **tokens, t_operation **ops, t_env *env)
 {
 	t_operation	*new;
 	t_word		*t;
@@ -26,13 +26,13 @@ int	parse_tree(t_word **tokens, t_operation **ops)
 	{
 		if (t->type == 8)
 		{
-			if (!generate_tree(t, ops))
+			if (!generate_tree(t, ops, env))
 				return (0);
 			t = skip_parenthesis(t);
 		}
 		else if (t->type == 9)
 			return (1);
-		else if (!generate_tree(t, ops))
+		else if (!generate_tree(t, ops, env))
 			return (0);
 		t = t->next;
 	}

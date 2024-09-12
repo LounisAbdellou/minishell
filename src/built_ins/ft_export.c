@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:14:17 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/09 17:24:47 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/12 14:11:04 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,23 @@ int	check_identifier(char *str)
 
 void	append_var(char *arg, char ***env)
 {
-	size_t	len;
+	size_t		i;
+	size_t		len;
+	char		**tmp;
 
+	i = 0;
 	len = ft_tablen(*env);
-	(*env)[len] = arg;
-	(*env)[len + 1] = NULL;
+	tmp = *env;
+	*env = ft_calloc(len + 2, sizeof(char *));
+	if (!(*env))
+		return ;
+	while (i < len)
+	{
+		(*env)[i] = tmp[i];
+		i++;
+	}
+	(*env)[i] = arg;
+	free(tmp);
 }
 
 int	exec_export(char *arg, char ***env)
@@ -76,5 +88,6 @@ int	ft_export(char **args, char ***env)
 			return (1);
 		i++;
 	}
+	ft_env(*env);
 	return (0);
 }

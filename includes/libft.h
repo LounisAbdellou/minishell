@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/06 13:28:39 by labdello          #+#    #+#             */
-/*   Updated: 2024/08/22 15:59:59 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:24:34 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ char		*ft_strrchr(const char *str, int c);
 char		**ft_split(char const *s, char c);
 char		*ft_strtrim(char const *s, char const *set);
 char		*ft_strjoin_sep(char *s1, char *s2, char *sep);
+char		*ft_getenv(char *var_name, char **env);
 void		ft_strrev(char *s);
 void		ft_putendl_fd(char const *s, int fd);
 void		ft_putchar_fd(char c, int fd);
@@ -81,6 +82,7 @@ void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		*ft_memmove(void *dest, const void *src, size_t n);
 void		*ft_memset(void *s, int value, size_t n);
 void		ft_puthex_fd(unsigned int hex, int capitilize, int fd);
+char		**ft_tabdup(char **src_tab);
 void		ft_free_tab(char **tab);
 void		ft_print_tab(char **tab);
 void		ft_print_2dtab(char ***tab);
