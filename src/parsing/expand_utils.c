@@ -6,13 +6,13 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/25 16:09:33 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/04 16:51:03 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/13 16:20:47 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-static char	*get_extract(char *str, int n, int is_env)
+static char	*get_extract(char *str, int n, t_env *env)
 {
 	char	*extract;
 	char	*var_name;
@@ -21,12 +21,17 @@ static char	*get_extract(char *str, int n, int is_env)
 	var_name = NULL;
 	if (!extract)
 		return (NULL);
-	if (is_env)
+	if (env->is_env)
 	{
 		var_name = extract;
-		extract = getenv(var_name + 1);
-		if (extract)
-			extract = ft_strdup(extract);
+		if (!ft_strcmp(var_name + 1, "?"))
+			extract = ft_itoa(env->last_status);
+		else
+		{
+			extract = ft_getenv(var_name + 1, env->vars);
+			if (extract)
+				extract = ft_strdup(extract);
+		}
 		free(var_name);
 		if (!extract)
 			extract = ft_strdup("");
@@ -36,19 +41,19 @@ static char	*get_extract(char *str, int n, int is_env)
 	return (extract);
 }
 
-static int	extract_and_join(char *str, char **content, int n, int is_env)
+static int	extract_and_join(char *str, char **content, int n, t_env *env)
 {
 	char	*extract;
 	char	*new_content;
 
 	if (!(*content))
 	{
-		*content = get_extract(str, n, is_env);
+		*content = get_extract(str, n, env);
 		if (!(*content))
 			return (0);
 		return (1);
 	}
-	extract = get_extract(str, n, is_env);
+	extract = get_extract(str, n, env);
 	if (!extract)
 		return (0);
 	new_content = ft_strjoin(*content, extract);
@@ -60,8 +65,13 @@ static int	extract_and_join(char *str, char **content, int n, int is_env)
 	return (1);
 }
 
-static int	is_end_expand(char *str, int is_env)
+static int	is_end_expand(char *str, int rel, int *i, int is_env)
 {
+	if (is_env && str[0] == '?' && rel == 1)
+	{
+		*i += 1;
+		return (1);
+	}
 	if (is_env && (ft_isspace(str[0]) || str[0] == '\0'
 			|| str[0] == '$' || str[0] == 39))
 		return (1);
@@ -79,31 +89,30 @@ char	*handle_empty(char *content)
 	return (content);
 }
 
-char	*handle_expand(char *str)
+char	*handle_expand(char *str, t_env *env)
 {
 	char	*content;
-	int		is_env;
 	int		i;
 	int		s;
 
 	i = 0;
 	s = 0;
-	is_env = 0;
+	env->is_env = 0;
 	content = NULL;
 	while (str[s])
 	{
 		if (str[s] == '$' && str[s + 1] != '\0' && !ft_isspace(str[s + 1]))
 		{
-			is_env = 1;
+			env->is_env = 1;
 			i++;
 		}
-		while (!is_end_expand(str + i, is_env))
+		while (!is_end_expand(str + i, i - s, &i, env->is_env))
 			i++;
-		if (!extract_and_join(str + s, &content, i - s, is_env))
+		if (!extract_and_join(str + s, &content, i - s, env))
 			return (NULL);
 		s = i;
 		i++;
-		is_env = 0;
+		env->is_env = 0;
 	}
 	return (free(str), handle_empty(content));
 }

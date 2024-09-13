@@ -6,11 +6,29 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 14:38:16 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/10 15:06:57 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:10:09 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	should_parse(char *input)
+{
+	int	i;
+
+	i = 0;
+	if (!input || !input[0])
+		return (0);
+	if ((input[0] == '!' || input[0] == ':') && !input[1])
+		return (0);
+	while (input[i])
+	{
+		if (!ft_isspace(input[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int	parse_tree(t_word **tokens, t_operation **ops, t_env *env)
 {
@@ -67,7 +85,7 @@ int	analyze_syntax(t_word **lst)
 	return (1);
 }
 
-int	generate_token(char *str, int len, t_word **lst)
+int	generate_token(char *str, int len, t_word **lst, t_env *env)
 {
 	char	*extract;
 	char	*token;
@@ -83,7 +101,7 @@ int	generate_token(char *str, int len, t_word **lst)
 	if (!extract)
 		return (0);
 	type = attribute_type(extract);
-	token = get_token_content(extract);
+	token = get_token_content(extract, env);
 	free(extract);
 	if (!token)
 		return (0);
@@ -95,7 +113,7 @@ int	generate_token(char *str, int len, t_word **lst)
 	return (1);
 }
 
-int	tokenize_input(char *input, t_word **lst)
+int	tokenize_input(char *input, t_word **lst, t_env *env)
 {
 	int	i;
 	int	start;
@@ -111,7 +129,7 @@ int	tokenize_input(char *input, t_word **lst)
 		start = i;
 		while (isnt_token_end(input + i))
 			i += handle_quotes(input + i, input[i]);
-		if (!generate_token(input + start, i - start + 1, lst))
+		if (!generate_token(input + start, i - start + 1, lst, env))
 			return (0);
 		if (input[i])
 			i++;
