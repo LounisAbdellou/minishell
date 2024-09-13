@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/12 17:11:12 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:22:49 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 	else
 	{
 		if (execve(cmd->path, cmd->args, env->vars) == -1)
-			error_from_exec(cmds);
+			error_from_exec(cmds, 1);
 	}
 	return ;
 }
@@ -68,8 +68,8 @@ static void	execute_cmd(t_cmd **cmds, t_cmd *current, t_env *env)
 		close(env->fd_in);
 		close(env->fd_out);
 		dup2(current->out, 1);
-		if (!check_cmd(current))
-			error_from_exec(cmds);
+		if (check_cmd(current))
+			error_from_exec(cmds, check_cmd(current));
 		else
 		{
 			if (current->in > -1)
@@ -79,7 +79,7 @@ static void	execute_cmd(t_cmd **cmds, t_cmd *current, t_env *env)
 		}
 	}
 	else if (current->pid < 0)
-		error_from_exec(cmds);
+		error_from_exec(cmds, 1);
 }
 
 static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
@@ -121,6 +121,7 @@ int	execute_tree(t_operation **ops, t_env *env)
 		else
 		{
 			op->s_exec = execute_op(&(op->cmd), op->cmd, env);
+			env->last_status = op->s_exec;
 			config_cmd_sig(1);
 		}
 		if (op->s_exec == -2)

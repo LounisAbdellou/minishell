@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 16:24:37 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:07:46 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+extern int	g_signal_status;
+
 typedef struct s_env
 {
 	char	*path;
@@ -33,6 +35,8 @@ typedef struct s_env
 	int		fd_in;
 	int		fd_out;
 	int		last_status;
+	int		s_expand;
+	int		is_env;
 }	t_env;
 
 typedef struct s_word
@@ -84,21 +88,22 @@ char		*get_prompt(char *station);
 char		*get_station(char *session);
 
 // TOKENIZER >>>
-int			tokenize_input(char *input, t_word **lst);
+int			tokenize_input(char *input, t_word **lst, t_env *env);
 int			is_space(char c);
 int			is_sgl_token(char *input);
 int			is_dbl_token(char *input);
 int			isnt_token_end(char *input);
-int			generate_token(char *str, int len, t_word **lst);
+int			generate_token(char *str, int len, t_word **lst, t_env *env);
 int			attribute_type(char *token);
 int			transform_t(t_word *token);
 int			handle_quotes(char *input, char c);
 int			unclosed_q(char *token);
-char		*handle_expand(char *str);
-char		*get_token_content(char *str);
+char		*handle_expand(char *str, t_env *env);
+char		*get_token_content(char *str, t_env *env);
 int			is_end_join(char c, char sep);
 
 // ANALYZER >>>
+int			should_parse(char *input);
 int			analyze_syntax(t_word **lst);
 int			analyze_token(t_word *token);
 int			analyze_operator(t_word *token);
@@ -125,7 +130,7 @@ void		close_pipes(t_cmd **cmds);
 int			should_exec(t_operation *op);
 int			check_cmd(t_cmd *current);
 int			wait_for_all(t_cmd **cmds);
-void		error_from_exec(t_cmd **cmds);
+void		error_from_exec(t_cmd **cmds, int why);
 void		return_error(void);
 
 // STRUCT >>>

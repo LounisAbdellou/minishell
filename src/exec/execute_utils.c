@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:13:50 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/12 18:13:53 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:47:37 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	init_pipes(t_cmd **cmds)
 	while (cmd)
 	{
 		if (pipe(fd) < 0)
-			error_from_exec(cmds);
+			error_from_exec(cmds, 255);
 		if (cmd->next == NULL && cmd->out == -2)
 		{
 			close(fd[1]);
@@ -90,14 +90,24 @@ int	wait_for_all(t_cmd **cmds)
 			break ;
 		cmd = cmd->next;
 	}
-	return (status);
+	if (WIFEXITED(status) && !g_signal_status)
+		return (WEXITSTATUS(status));
+	if ((WIFEXITED(status) && g_signal_status))
+		return (128 + g_signal_status);
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (0);
 }
 
 int	check_cmd(t_cmd *current)
 {
-	if (current->in < 0)
-		return (0);
-	if (current->out < 0)
-		return (0);
-	return (1);
+	if (!current->path)
+		return (2);
+	if (access(current->path, F_OK) != 0)
+		return (127);
+	if (access(current->path, X_OK) != 0)
+		return (126);
+	if (current->in < 0 || current->out < 0)
+		return (1);
+	return (0);
 }

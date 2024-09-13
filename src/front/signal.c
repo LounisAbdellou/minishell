@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:30:34 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/11 17:29:56 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:46:45 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	heredoc_sig(int status)
 		ft_putstr_fd("\n", 1);
 		rl_on_new_line();
 		unlink("/tmp/.heredoc");
-		exit(0);
+		exit(status);
 	}
 }
 

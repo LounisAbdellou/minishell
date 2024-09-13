@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:14:27 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/10 16:19:19 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/13 15:00:08 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	attribute_type(char *token)
 	return (0);
 }
 
-static int	join_expand(char **token, char *str, char sep, int s)
+static int	join_expand(char **token, char *str, char sep, t_env *env)
 {
 	char	*extract;
 	char	*expand;
@@ -76,14 +76,14 @@ static int	join_expand(char **token, char *str, char sep, int s)
 	i = 1;
 	while (str[i] && !is_end_join(str[i], sep))
 		i++;
-	if (i - s == 0)
+	if (i - env->s_expand == 0)
 		return (1);
-	extract = ft_strndup(str + s, i - s);
+	extract = ft_strndup(str + env->s_expand, i - env->s_expand);
 	if (!extract)
 		return (0);
 	expand = extract;
 	if (sep != 39)
-		expand = handle_expand(extract);
+		expand = handle_expand(extract, env);
 	if (!expand)
 		return (free(extract), 0);
 	join = ft_strjoin(*token, expand);
@@ -95,12 +95,11 @@ static int	join_expand(char **token, char *str, char sep, int s)
 	return (1);
 }
 
-char	*get_token_content(char *str)
+char	*get_token_content(char *str, t_env *env)
 {
 	char	*token;
 	char	sep;
 	int		i;
-	int		s;
 
 	token = ft_calloc(1, sizeof(char));
 	if (!token)
@@ -109,10 +108,10 @@ char	*get_token_content(char *str)
 	while (str[i])
 	{
 		sep = str[i];
-		s = 0;
+		env->s_expand = 0;
 		if (sep == 34 || sep == 39)
-			s = 1;
-		if (!join_expand(&token, str + i, sep, s))
+			env->s_expand = 1;
+		if (!join_expand(&token, str + i, sep, env))
 			return (free(token), NULL);
 		i++;
 		while (str[i] && !is_end_join(str[i], sep))

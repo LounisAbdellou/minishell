@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 12:17:23 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/12 12:48:53 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:48:23 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@ void	return_error(void)
 	static int	has_err;
 
 	if (!has_err)
-		perror("Pipex error");
+		perror("Minishell error");
 	has_err = 1;
 }
 
-void	error_from_exec(t_cmd **cmds)
+void	error_from_exec(t_cmd **cmds, int why)
 {
 	close_pipes(cmds);
 	free_cmds(cmds);
+	if (why == 2)
+		exit(0);
 	return_error();
-	exit(1);
+	exit(why);
 }
 
 int	should_exec(t_operation *op)

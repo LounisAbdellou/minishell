@@ -6,25 +6,30 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 18:01:50 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/12 16:08:30 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/13 19:10:12 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	g_signal_status = 0;
 
 static int	minishell_do(char *input, t_env *env)
 {
 	t_word		*token;
 	t_operation	*ops;
 
-	if (!input || !input[0])
+	if (!should_parse(input))
 		return (1);
 	token = NULL;
 	ops = NULL;
-	if (!tokenize_input(input, &token))
+	if (!tokenize_input(input, &token, env))
 		return (free_words(&token), 0);
 	if (!analyze_syntax(&token))
+	{
+		env->last_status = 2;
 		return (free_words(&token), 0);
+	}
 	if (!parse_tree(&token, &ops, env))
 		return (free_parse(&token, &ops), 0);
 	if (execute_tree(&ops, env) == -1)
@@ -39,6 +44,7 @@ void	minishell(char *station, t_env *env)
 
 	while (1)
 	{
+		g_signal_status = 0;
 		prompt = get_prompt(station);
 		if (!prompt)
 			line = readline("minishell$ ");
@@ -67,9 +73,13 @@ void	init_env(t_env *local_env, char **env)
 	local_env->fd_in = dup(0);
 	local_env->fd_out = dup(1);
 	local_env->path = getenv("PATH");
+	local_env->last_status = 0;
+	local_env->s_expand = 0;
+	local_env->is_env = 0;
+	if (!local_env->path)
+		local_env->path = ENV_PATH;
 	if (!env[0] && ft_tablen(env) < 1)
 	{
-		local_env->path = ENV_PATH;
 		tab = ft_calloc(2, sizeof(char *));
 		if (!tab)
 			return ;
