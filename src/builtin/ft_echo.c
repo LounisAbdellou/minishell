@@ -1,36 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/29 15:41:20 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/09 17:39:36 by rbouselh         ###   ########.fr       */
+/*   Created: 2024/08/29 19:45:33 by labdello          #+#    #+#             */
+/*   Updated: 2024/09/16 18:54:20 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_unset(char **args, char ***env)
+int	check_nl_flag(char *arg)
 {
 	size_t	i;
-	size_t	pos;
+
+	i = 2;
+	if (ft_strncmp(arg, "-n", 2) != 0)
+		return (0);
+	while (arg[i] == 'n')
+		i++;
+	if (arg[i] != '\0')
+		return (0);
+	return (1);
+}
+
+int	ft_echo(char **args)
+{
+	size_t	i;
+	int		nl;
 
 	i = 1;
-	while (args[i] != NULL)
+	nl = 1;
+	if (!args[i])
 	{
-		if (!find_var_pos(args[i], *env, &pos))
-		{
-			i++;
-			continue ;
-		}
-		while ((*env)[pos] != NULL)
-		{
-			(*env)[pos] = (*env)[pos + 1];
-			pos++;
-		}
+		ft_putstr_fd("\n", 1);
+		return (0);
+	}
+	if (check_nl_flag(args[i]))
+	{
+		nl = 0;
 		i++;
 	}
+	while (args[i] != NULL)
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1] != NULL)
+			ft_putchar_fd(' ', 1);
+		i++;
+	}
+	if (nl)
+		ft_putchar_fd('\n', 1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 15:31:04 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/02 15:58:47 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:58:42 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ char	*get_current_path(char *home)
 		if (!tmp)
 			return (NULL);
 		tmp[0] = '~';
-		tmp[1] = '/';
 	}
 	else
 		tmp = ft_strdup(cwd_buffer);

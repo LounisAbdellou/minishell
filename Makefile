@@ -6,7 +6,7 @@ LIBFT = ./libft/libft.a
 SRC_DIR = src
 OBJ_DIR = obj
 FRONT_DIR = front
-BUILTINS_DIR = built_ins
+BUILTINS_DIR = builtin
 PARSING_DIR = parsing
 STRUCT_DIR = struct
 EXEC_DIR = exec
@@ -14,7 +14,7 @@ EXEC_DIR = exec
 FRONT = $(addprefix $(FRONT_DIR)/, prompt.c signal.c)
 BUILTINS = $(addprefix $(BUILTINS_DIR)/, utils.c ft_export.c ft_env.c ft_unset.c ft_echo.c ft_cd.c ft_pwd.c)
 PARSING = $(addprefix $(PARSING_DIR)/, parsing.c tokenizer.c tokenizer_utils.c analyzer_utils.c expand_utils.c parse_tree.c setter_cmd.c setter_cmd_utils.c free_parse.c)
-STRUCT = $(addprefix $(STRUCT_DIR)/, lst_word.c lst_op.c lst_cmd.c lst_file.c)
+STRUCT = $(addprefix $(STRUCT_DIR)/, lst_word.c lst_op.c lst_cmd.c lst_file.c init_env.c)
 EXEC = $(addprefix $(EXEC_DIR)/, execute.c execute_utils.c execute_error.c)
 SRCS = $(addprefix $(SRC_DIR)/, $(FRONT) $(PARSING) $(STRUCT) $(EXEC) $(BUILTINS) main.c print_dev.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)

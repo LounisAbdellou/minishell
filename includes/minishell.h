@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/13 19:07:46 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:53:23 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ t_operation	*ft_oplast(t_operation *op);
 t_file		*ft_filenew(char *str, int type);
 void		ft_fileadd_back(t_file *new, t_file **lst);
 void		free_file(t_file **lst);
+int			init_env(t_env *local_env, char **env);
+void		free_env(t_env *local_env);
 
 // FREE >>>
 void		free_parse(t_word **token, t_operation **operations);
@@ -164,8 +166,9 @@ int			ft_pwd(void);
 int			ft_cd(char **args);
 int			ft_env(char **env);
 int			ft_echo(char **args);
-int			ft_export(char **args, char ***env);
-int			ft_unset(char **args, char ***env);
+int			ft_export(char **args, t_env *env);
+int			ft_unset(char **args, t_env *env);
+int			exec_export(char *arg, t_env *env);
 int			find_var_pos(char *var_name, char **env, size_t *pos);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/13 19:22:49 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/16 18:52:56 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static int	execblt(t_cmd *cmd, t_env *env)
 	if (!ft_strcmp(cmd->path, "cd"))
 		status = ft_cd(cmd->args);
 	if (!ft_strcmp(cmd->path, "unset"))
-		status = ft_unset(cmd->args, &env->vars);
+		status = ft_unset(cmd->args, env);
 	if (!ft_strcmp(cmd->path, "export"))
-		status = ft_export(cmd->args, &env->vars);
+		status = ft_export(cmd->args, env);
 	if (!ft_strcmp(cmd->path, "exit"))
 		status = -2;
 	if (!ft_strcmp(cmd->path, "pwd"))
