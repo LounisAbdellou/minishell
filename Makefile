@@ -16,7 +16,7 @@ BUILTINS = $(addprefix $(BUILTINS_DIR)/, utils.c ft_export.c ft_env.c ft_unset.c
 PARSING = $(addprefix $(PARSING_DIR)/, parsing.c tokenizer.c tokenizer_utils.c analyzer_utils.c expand_utils.c parse_tree.c setter_cmd.c setter_cmd_utils.c free_parse.c heredoc.c)
 STRUCT = $(addprefix $(STRUCT_DIR)/, lst_word.c lst_op.c lst_cmd.c lst_file.c init_env.c entry_lst.c)
 EXEC = $(addprefix $(EXEC_DIR)/, execute.c execute_utils.c execute_error.c wildcard.c)
-SRCS = $(addprefix $(SRC_DIR)/, $(FRONT) $(PARSING) $(STRUCT) $(EXEC) $(BUILTINS) main.c print_dev.c)
+SRCS = $(addprefix $(SRC_DIR)/, $(FRONT) $(PARSING) $(STRUCT) $(EXEC) $(BUILTINS) main.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
