@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/20 15:20:39 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:38:48 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_env
 {
 	char	*path;
 	char	**vars;
+	char	**virtual_vars;
 	int		fd_in;
 	int		fd_out;
 	int		last_status;
@@ -177,11 +178,13 @@ void			print_cmds(t_cmd **cmds);
 // BUILT_INS >>>
 int				ft_pwd(void);
 int				ft_cd(char **args);
-int				ft_env(char **env);
+int				ft_env(char **env, int from_export);
 int				ft_echo(char **args);
 int				ft_export(char **args, t_env *env);
 int				ft_unset(char **args, t_env *env);
 int				exec_export(char *arg, t_env *env);
 int				find_var_pos(char *var_name, char **env, size_t *pos);
+int				check_identifier(char *str);
+void			sort_env(char ***env);
 
 #endif

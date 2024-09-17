@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:22:21 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/16 18:53:49 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/17 19:12:33 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ static int	set_vars(t_env *local_env, char **env, char **blvl, char **env_var)
 	if (!local_env->vars)
 		local_env->vars = ft_calloc(1, sizeof(char *));
 	if (!local_env->vars)
+		return (0);
+	local_env->virtual_vars = ft_tabdup(local_env->vars);
+	if (!local_env->virtual_vars)
 		return (0);
 	return (1);
 }
@@ -66,6 +69,8 @@ void	free_env(t_env *local_env)
 		free(local_env->path);
 	if (local_env->vars)
 		ft_free_tab(local_env->vars);
+	if (local_env->virtual_vars)
+		ft_free_tab(local_env->virtual_vars);
 	close(local_env->fd_in);
 	close(local_env->fd_out);
 }
