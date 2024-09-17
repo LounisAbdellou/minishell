@@ -44,11 +44,12 @@ int	init_env(t_env *local_env, char **env)
 	char	*bash_lvl;
 	char	*env_var;
 
-	local_env->fd_in = dup(0);
-	local_env->fd_out = dup(1);
+	local_env->fd_in = dup(STDIN_FILENO);
+	local_env->fd_out = dup(STDOUT_FILENO);
 	local_env->last_status = 0;
 	local_env->s_expand = 0;
 	local_env->is_env = 0;
+	local_env->s_exit = 0;
 	env_path = getenv("PATH");
 	if (!env_path)
 		env_path = ENV_PATH;

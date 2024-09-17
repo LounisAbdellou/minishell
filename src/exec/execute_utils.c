@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 14:13:50 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/13 19:47:37 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/19 18:10:21 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,25 +54,22 @@ void	init_pipes(t_cmd **cmds)
 	cmd = *cmds;
 	if (cmd->in == -2)
 		cmd->in = 0;
-	while (cmd)
+	while (cmd->next)
 	{
 		if (pipe(fd) < 0)
 			error_from_exec(cmds, 255);
-		if (cmd->next == NULL && cmd->out == -2)
-		{
-			close(fd[1]);
-			cmd->out = 1;
-		}
 		if (cmd->out == -2)
 			cmd->out = fd[1];
 		else
 			close(fd[1]);
-		if (cmd->next && cmd->next->in == -2)
+		if (cmd->next->in == -2)
 			cmd->next->in = fd[0];
 		else
 			close(fd[0]);
 		cmd = cmd->next;
 	}
+	if (cmd->out == -2)
+		cmd->out = 1;
 }
 
 int	wait_for_all(t_cmd **cmds)
@@ -101,11 +98,13 @@ int	wait_for_all(t_cmd **cmds)
 
 int	check_cmd(t_cmd *current)
 {
+	if (current->type == 2)
+		return (0);
 	if (!current->path)
 		return (2);
-	if (access(current->path, F_OK) != 0)
+	if (current->type != 0 && access(current->path, F_OK) != 0)
 		return (127);
-	if (access(current->path, X_OK) != 0)
+	if (current->type != 0 && access(current->path, X_OK) != 0)
 		return (126);
 	if (current->in < 0 || current->out < 0)
 		return (1);
