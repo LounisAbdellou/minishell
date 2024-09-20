@@ -35,31 +35,32 @@ typedef struct s_entry_list
 
 typedef struct s_env
 {
-	char	*path;
-	char	**vars;
-	char	**virtual_vars;
-	int		fd_in;
-	int		fd_out;
-	int		last_status;
-	int		s_expand;
-	int		is_env;
-}				t_env;
+	char				*path;
+	char				**vars;
+	char				**virtual_vars;
+	int					fd_in;
+	int					fd_out;
+	int					last_status;
+	int					s_expand;
+	int					is_env;
+	int					s_exit;
+}	t_env;
 
 typedef struct s_word
 {
-	char			*content;
-	int				type;
-	struct s_word	*next;
-	struct s_word	*prev;
+	char				*content;
+	int					type;
+	struct s_word		*next;
+	struct s_word		*prev;
 }				t_word;
 
 typedef struct s_file
 {
-	char			*name;
-	int				fd;
-	int				type;
-	struct s_file	*next;
-	struct s_file	*prev;
+	char				*name;
+	int					fd;
+	int					type;
+	struct s_file		*next;
+	struct s_file		*prev;
 }				t_file;
 
 typedef struct s_cmd
@@ -139,7 +140,6 @@ int				should_exec(t_operation *op);
 int				check_cmd(t_cmd *current);
 int				wait_for_all(t_cmd **cmds);
 void			error_from_exec(t_cmd **cmds, int why);
-void			return_error(void);
 int				handle_wildcard(char ***args);
 
 // STRUCT >>>
@@ -182,6 +182,7 @@ int				ft_env(char **env, int from_export);
 int				ft_echo(char **args);
 int				ft_export(char **args, t_env *env);
 int				ft_unset(char **args, t_env *env);
+int				ft_exit(char **args, t_env *env);
 int				exec_export(char *arg, t_env *env);
 int				find_var_pos(char *var_name, char **env, size_t *pos);
 int				check_identifier(char *str);

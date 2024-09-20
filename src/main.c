@@ -82,5 +82,5 @@ int	main(int ac, char **av, char **env)
 	free_env(&local_env);
 	if (station)
 		free(station);
-	return (0);
+	return (local_env.last_status);
 }
