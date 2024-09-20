@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/16 18:52:56 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/16 19:23:44 by labdello         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ static void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
+	handle_wildcard(&cmd->args);
 	if (cmd->type == 0)
 	{
 		status = execblt(cmd, env);
@@ -95,6 +96,7 @@ static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
 		if (current->in > -1)
 			dup2(current->in, 0);
 		close_pipes(cmds);
+		handle_wildcard(&current->args);
 		status = execblt(current, env);
 		return (dup2(env->fd_in, 0), dup2(env->fd_out, 1), status);
 	}
