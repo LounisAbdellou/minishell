@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 15:14:18 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/10 15:22:55 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/20 13:26:30 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_getenv(char *var_name, char **env)
 	int		j;
 	char	*str;
 
+	if (!var_name || !env)
+		return (NULL);
 	i = 0;
 	while (env[i] != NULL)
 	{
