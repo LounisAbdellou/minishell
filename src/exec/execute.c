@@ -30,7 +30,7 @@ static int	execblt(t_cmd *cmd, t_env *env)
 	if (!ft_strcmp(cmd->path, "pwd"))
 		status = ft_pwd();
 	if (!ft_strcmp(cmd->path, "env"))
-		status = ft_env(env->vars);
+		status = ft_env(env->vars, 0);
 	return (status);
 }
 
