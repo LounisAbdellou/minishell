@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 18:06:43 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/16 19:23:44 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/20 18:53:10 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	execute_this(t_cmd *cmd, t_cmd **cmds, t_env *env)
 		close(env->fd_in);
 		close(env->fd_out);
 		if (execve(cmd->path, cmd->args, env->vars) == -1)
-			error_from_exec(cmds, 1);
+			error_from_exec(cmds, 1, env);
 	}
 	return ;
 }
@@ -71,7 +71,7 @@ static void	execute_cmd(t_cmd **cmds, t_cmd *current, t_env *env)
 		if (current->out > 1)
 			dup2(current->out, STDOUT_FILENO);
 		if (check_cmd(current))
-			error_from_exec(cmds, check_cmd(current));
+			error_from_exec(cmds, check_cmd(current), env);
 		else
 		{
 			if (current->in > 1)
@@ -81,7 +81,7 @@ static void	execute_cmd(t_cmd **cmds, t_cmd *current, t_env *env)
 		}
 	}
 	else if (current->pid < 0)
-		error_from_exec(cmds, 1);
+		error_from_exec(cmds, 1, env);
 }
 
 static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
@@ -89,10 +89,12 @@ static int	execute_op(t_cmd **cmds, t_cmd *current, t_env *env)
 	int	status;
 
 	init_files(cmds, env);
-	init_pipes(cmds);
+	init_pipes(cmds, env);
 	config_cmd_sig(0);
 	if (current->next == NULL && current->type == 0)
 	{
+		if (check_cmd(current))
+			return (check_cmd(current));
 		dup2(current->out, STDOUT_FILENO);
 		if (current->in > -1)
 			dup2(current->in, STDIN_FILENO);
@@ -120,6 +122,7 @@ int	execute_tree(t_operation **ops, t_env *env)
 	while (op)
 	{
 		env->s_exit = 0;
+		env->is_err = 0;
 		if (!should_exec(op))
 			op->s_exec = op->prev->s_exec;
 		else

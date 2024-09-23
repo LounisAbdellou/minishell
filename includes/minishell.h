@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 10:56:02 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/20 15:38:48 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/23 13:01:05 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <dirent.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/stat.h>
 
 typedef struct s_entry_list
 {
@@ -44,6 +45,7 @@ typedef struct s_env
 	int					s_expand;
 	int					is_env;
 	int					s_exit;
+	int					is_err;
 }	t_env;
 
 typedef struct s_word
@@ -134,13 +136,15 @@ int				set_file(t_file *current, t_env *env);
 // EXEC >>>
 int				execute_tree(t_operation **ops, t_env *env);
 void			init_files(t_cmd **cmds, t_env *env);
-void			init_pipes(t_cmd **cmds);
+void			init_pipes(t_cmd **cmds, t_env *env);
 void			close_pipes(t_cmd **cmds);
 int				should_exec(t_operation *op);
 int				check_cmd(t_cmd *current);
 int				wait_for_all(t_cmd **cmds);
-void			error_from_exec(t_cmd **cmds, int why);
 int				handle_wildcard(char ***args);
+void			error_from_exec(t_cmd **cmds, int why, t_env *env);
+void			print_blt_err(char *blt, char *arg, char *msg, int is_blt);
+int				check_is_cmd(t_cmd *current);
 
 // STRUCT >>>
 t_word			*ft_wordnew(char *str);

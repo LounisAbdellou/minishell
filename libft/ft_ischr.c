@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 18:02:33 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/17 18:04:28 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/20 15:58:59 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,5 @@ int	ft_ischr(char *str, char c)
 			return (0);
 		i++;
 	}
-	return (1);
+	return (i);
 }

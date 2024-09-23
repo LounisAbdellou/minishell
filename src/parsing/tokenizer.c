@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 14:14:27 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/20 11:46:48 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/23 11:55:32 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	transform_t(t_word *token)
 	t_word	*current;
 
 	current = token;
+	if (!current->content[0] && current->next)
+		return (1);
 	current->type = 1;
 	current = current->next;
 	while (current)

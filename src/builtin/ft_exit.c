@@ -6,7 +6,7 @@
 /*   By: rbouselh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 14:10:27 by rbouselh          #+#    #+#             */
-/*   Updated: 2024/09/19 19:31:28 by rbouselh         ###   ########.fr       */
+/*   Updated: 2024/09/20 16:59:57 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,22 @@ static int	check_exit(char **args, char *arg, t_env *env)
 	while (arg[i] && !ft_isspace(arg[i]))
 	{
 		if (!ft_isdigit(arg[i]))
-			return (ft_putstr_fd("Numeric argument required\n", 2), 2);
-			// return (printf("Numeric argument required\n"), 2);
+			return (ft_putstr_fd(" numeric argument required\n", 2), 2);
 		i++;
 	}
 	len = i;
 	while (arg[i])
 	{
 		if (!ft_isspace(arg[i]))
-			return (ft_putstr_fd("Numeric argument required\n", 2), 2);
-			// return (printf("Numeric argument required\n"), 2);
+			return (ft_putstr_fd(" numeric argument required\n", 2), 2);
 		i++;
 	}
 	if (len > 19)
-		return (ft_putstr_fd("Numeric argument required\n", 2), 2);
-		// return (printf("Numeric argument required\n"), 2);
+		return (ft_putstr_fd(" numeric argument required\n", 2), 2);
 	if (ft_tablen(args) > 2)
 	{
 		env->s_exit = 0;
-		return (ft_putstr_fd("Too many arguments\n", 2), 1);
-		// return (printf("Too many arguments\n"), 1);
+		return (ft_putstr_fd(" too many arguments\n", 2), 1);
 	}
 	return (0);
 }

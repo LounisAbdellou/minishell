@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 16:14:17 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/19 19:31:33 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/20 17:09:52 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,10 @@ int	ft_export(char **args, t_env *env)
 	while (args[i] != NULL)
 	{
 		if (!exec_export(args[i], env))
+		{
+			print_blt_err("export", args[i], "not a valid identifier", 1);
 			return (1);
+		}
 		i++;
 	}
 	return (0);

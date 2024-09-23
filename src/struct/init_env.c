@@ -6,7 +6,7 @@
 /*   By: labdello <labdello@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 18:22:21 by labdello          #+#    #+#             */
-/*   Updated: 2024/09/17 19:12:33 by labdello         ###   ########.fr       */
+/*   Updated: 2024/09/20 18:08:09 by rbouselh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int	init_env(t_env *local_env, char **env)
 	local_env->s_expand = 0;
 	local_env->is_env = 0;
 	local_env->s_exit = 0;
+	local_env->is_err = 0;
 	env_path = getenv("PATH");
 	if (!env_path)
 		env_path = ENV_PATH;
